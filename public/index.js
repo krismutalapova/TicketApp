@@ -7,19 +7,32 @@ const capitalize = input => {
   return CapitalizedWords.join(' ');
 };
 
-const eventTemplate = (event) => {
+const localEventTemplate = (event) => {
   const name = capitalize(event.name.toLowerCase().replace(/[-,].*$/, '').trim());
   return `
-    <section class="event__card">
-    <p class="event__artist" id="artist">${name}</p>
+  <a href="${event.url}" target="_blank"><section class="event__card">
+    <h2 class="event__artist" id="artist">${name}</h2>
     <p class="event__date" id="date">${event.dates.start.localDate}</p>
     <p class="event__price" id="price">From ${event.priceRanges[0].min} to ${event.priceRanges[0].max} ${event.priceRanges[0].currency}</p>
     <img src="${event.images[0].url}" alt="artist" class="event__img" id="picture">
-    <a href="${event.url}" target="_blank">View event</a>
-    </section>`;
+    </section></a>`;
 };
 
-const eventContainer = document.querySelector('#event-container');
+const eventTemplate = event => {
+  const name = capitalize(event.name.toLowerCase().replace(/,.*$/, '').trim());
+  const location = event.dates.timezone;
+  const locationName = location.replace(/\w*\//, '').replace('_', ' ');
+  return `
+  <a href="${event.url}" target="_blank"><section class="event__card">
+    <h2 class="event__artist" id="artist">${name}</h2>
+    <p class="event__date" id="date">${event.dates.start.localDate}</p>
+    <p class="event__date" id="date">${locationName}</p>
+    <img src="${event.images[0].url}" alt="artist" class="event__img" id="picture">
+    </section></a>`;
+};
+
+const div = document.querySelector('#event-container');
+const locationName = document.querySelector('.location-name');
 
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(position => {
@@ -40,15 +53,67 @@ if (navigator.geolocation) {
       .then(data => {
         const { events } = data._embedded;
         const location = data._embedded.events[0].dates.timezone;
-        const locationName = document.querySelector('.location-name');
-        locationName.textContent = location.replace(/\w*\//, '');
-        return events.map(e => eventTemplate(e)).join('');
+        locationName.textContent = 'You are in ' + location.replace(/\w*\//, '');
+        return events.map(e => localEventTemplate(e)).join('');
       })
       .then(events => {
-        document.querySelector('#event-container').innerHTML = events;
+        div.innerHTML = events;
       });
   });
 } else {
-  eventContainer.innerHTML = '<h1>Geolocation is not supported by this browser</h1>';
+  div.innerHTML = '<h1>Geolocation is not supported by this browser</h1>';
   console.log('geolication not available');
 }
+
+const searchEvent = () => {
+  const { value } = document.querySelector('#search');
+  fetch(`/search/${value}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data._embedded) {
+        const { events } = data._embedded;
+        locationName.textContent = '';
+        return events.map(e => eventTemplate(e)).join('');
+      } else {
+        locationName.textContent = `Sorry, no events for ${value}`;
+        }
+    })
+    .then(events => {
+      div.innerHTML = events || '';
+    });
+};
+
+const searchCity = () => {
+  const { value } = document.querySelector('#city_search');
+  fetch(`/find/${value}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data._embedded) {
+      const { events } = data._embedded;
+      const location = data._embedded.events[0].dates.timezone;
+      locationName.textContent = location.replace(/\w*\//, '');
+      return events.map(e => eventTemplate(e)).join('');
+    } else {
+      locationName.textContent = `Sorry, no events for ${value}`;
+      }
+    })
+    .then(events => {
+      div.innerHTML = events || '';
+    });
+};
+
+window.onload = () => {
+  const findEventBtn = document.querySelector('#submit');
+  findEventBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    searchEvent();
+    document.querySelector('#search').value = '';
+  });
+
+  const findCityBtn = document.querySelector('#submit_city');
+  findCityBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    searchCity();
+    document.querySelector('#city_search').value = '';
+  });
+};

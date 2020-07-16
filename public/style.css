@@ -19,6 +19,7 @@ body {
     align-items: center;
     background: linear-gradient(#56CCF2, #2F80ED);
     min-height: 100vh;
+    min-width: 50vh;
     color: white;
 }
 
@@ -33,14 +34,15 @@ header {
 }
 
 h1 {
-    font-weight: 300;
-    margin-bottom: 0.5rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
 }
 
 section {
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     width: 350px;
+    min-height: 250px;
     margin: 1rem;
     border-radius: 3px;
     color: #222;
@@ -50,20 +52,25 @@ section {
     text-align: center;
 }
 
- /* Modules */
-
- .search {
-    padding: 5px;
-    height: 40px;
-    border-radius: 5px;
-    color: #1D2671;
+h2 {
+    font-weight: 400;
 }
 
-.submit {
-    width: 60px;
-    height: 40px;
-    color: #1D2671;
+ /* Modules */
+
+input {
+    padding: 5px;
+    height: 20px;
     border-radius: 5px;
+    border: none;
+    margin: 5px 0;
+}
+
+button {
+    width: 20px;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
 }
 
 .location-container {
@@ -83,22 +90,40 @@ section {
 
 img {
     display: block;
-    max-width:230px;
-    max-height:95px;
+    max-width:280px;
+    max-height:120px;
     width: auto;
     height: auto;
-    border-radius: 3px 3px 0 0;
+    border-radius: 3px;
+    margin: 10px 0;
   }
 
 a {
     text-decoration: none;
-    color: #222;
+    color: #1a2159;
 }  
+
+.event__price {
+    font-size: 12px;
+    opacity: 90%;
+}
     
 /* State */
 
 input:focus, textarea:focus, select:focus{
     outline: none;
+}
+
+button:hover {
+    transform: scale(1.08);
+    background-color:  #2F80ED;
+    transition-duration: 0.3s;
+    border-radius: 5px;
+ }
+
+section:hover {
+    transform: scale(1.02);
+    transition-duration: 0.3s;
 }
 
 /* Theme */
@@ -116,7 +141,7 @@ input:focus, textarea:focus, select:focus{
     }
 
     img {
-        width: 250px;
+        width: auto;
         height: auto;
     }
 }
