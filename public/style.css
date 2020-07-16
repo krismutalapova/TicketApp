@@ -3,12 +3,80 @@
 * {
     padding: 0;
     margin: 0;
-    box-sizing: border-box;
+    
+    text-decoration: none;
+}
+
+html {
+    font-size: 18px;
+    background-color:white;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Helvetica Neue', 'Roboto', sans-serif;
+    background: linear-gradient(#56CCF2, #2F80ED);
+    font-family: sans-serif;
+    color: white;
 }
 
 /* Layout  */
 
-/* Modules */
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 2rem 1rem 4rem 1rem;
+}
+
+h1 {
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+}
+
+.input {
+    margin: 40px 0;
+    padding: 5px;
+    height: 30px;
+    border-radius: 5px;
+    color: #1D2671;
+}
+
+.location-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.event-container {
+    padding: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    line-height: 1.5;
+}
+
+section {
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 350px;
+    margin: 1rem;
+    border-radius: 3px;
+    color: black;
+}
+
+ img {
+    border-radius: 3px 3px 0 0;
+ }
+
+ /* Modules */
+
+
     
 /* State */
 
@@ -17,4 +85,17 @@
 /* Very small screens  */
 
 @media screen and (max-width: 350px) {
+
+    html {
+        font-size: 15px;
+    }
+
+    section {
+        width: 250px;
+    }
+
+    img {
+        width: 250px;
+        height: auto;
+    }
 }
