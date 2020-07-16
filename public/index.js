@@ -1,10 +1,23 @@
-const eventTemplate = (event) => `
+const capitalize = input => {
+  const words = input.split(' ');
+  const CapitalizedWords = [];
+  words.forEach(element => {
+    CapitalizedWords.push(element[0].toUpperCase() + element.slice(1, element.length));
+  });
+  return CapitalizedWords.join(' ');
+};
+
+const eventTemplate = (event) => {
+  const name = capitalize(event.name.toLowerCase().replace(/[-,].*$/, '').trim());
+  return `
     <section class="event__card">
-    <p class="event__artist" id="artist">${event.name}</p>
+    <p class="event__artist" id="artist">${name}</p>
     <p class="event__date" id="date">${event.dates.start.localDate}</p>
-    <p class="event__price" id="price">From <span id="from"></span> to <span id="to"> to</span></p>
-    <img src="${event.images[0].url}" width="100px" height="100px" alt="artist" class="event__img" id="picture">
+    <p class="event__price" id="price">From ${event.priceRanges[0].min} to ${event.priceRanges[0].max} ${event.priceRanges[0].currency}</p>
+    <img src="${event.images[0].url}" alt="artist" class="event__img" id="picture">
+    <a href="${event.url}" target="_blank">View event</a>
     </section>`;
+};
 
 const eventContainer = document.querySelector('#event-container');
 
