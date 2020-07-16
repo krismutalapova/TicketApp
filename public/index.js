@@ -19,9 +19,9 @@ const localEventTemplate = (event) => {
 };
 
 const eventTemplate = event => {
-  const name = capitalize(event.name.toLowerCase().replace(/,.*$/, '').trim());
+  const name = event.name.replace(/,.*$/, '').trim();
   const location = event.dates.timezone;
-  const locationName = location.replace(/\w*\//, '').replace('_', ' ');
+  const locationName = location ? location.replace(/\w*\//, '').replace('_', ' ') : '' ;
   return `
   <a href="${event.url}" target="_blank"><section class="event__card">
     <h2 class="event__artist" id="artist">${name}</h2>
@@ -72,6 +72,7 @@ const searchEvent = () => {
     .then(data => {
       if (data._embedded) {
         const { events } = data._embedded;
+        console.log(events)
         locationName.textContent = '';
         return events.map(e => eventTemplate(e)).join('');
       } else {
@@ -91,7 +92,7 @@ const searchCity = () => {
       if (data._embedded) {
       const { events } = data._embedded;
       const location = data._embedded.events[0].dates.timezone;
-      locationName.textContent = location.replace(/\w*\//, '');
+      locationName.textContent = location.replace(/\w*\//, '').replace('_', ' ');
       return events.map(e => eventTemplate(e)).join('');
     } else {
       locationName.textContent = `Sorry, no events for ${value}`;
