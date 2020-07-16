@@ -1,9 +1,4 @@
-window.addEventListener('load', () => {
-    let lon;
-    let lat;
-    let locationName = document.querySelector('.location-name');
-    let eventContainer = document.querySelector('#event-container');
-    const eventTemplate = (event) => `
+const eventTemplate = (event) => `
     <section class="event__card">
     <p class="event__artist" id="artist">${event.name}</p>
     <p class="event__date" id="date">${event.dates.start.localDate}</p>
@@ -11,24 +6,36 @@ window.addEventListener('load', () => {
     <img src="${event.images[0].url}" width="100px" height="100px" alt="artist" class="event__img" id="picture">
     </section>`;
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-            lon = position.coords.longitude;
-            lat = position.coords.latitude;
+const eventContainer = document.querySelector('#event-container');
 
-            const api = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=2P74PXuICGG1AseG6pKeMd3ZohyWVvBA&latlong=${lat},${lon}`;
-          
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(position => {
+    const lon = position.coords.longitude;
+    const lat = position.coords.latitude;
 
-            fetch(api)
-                .then(response => response.json())
-                .then(data => {
-                    const {events} = data._embedded;
-                    const location = data._embedded.events[0].dates.timezone;
-                    locationName.textContent = location.replace(/\w*\//, '');
-                    return events.map(e => eventTemplate(e)).join('');
-                })
-                .then(events => eventContainer.innerHTML = events);
-        });
+    const data = { lat, lon };
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    };
 
-    }
-});
+    fetch('/nearby', options)
+      .then(response => response.json())
+      .then(data => {
+        const { events } = data._embedded;
+        const location = data._embedded.events[0].dates.timezone;
+        const locationName = document.querySelector('.location-name');
+        locationName.textContent = location.replace(/\w*\//, '');
+        return events.map(e => eventTemplate(e)).join('');
+      })
+      .then(events => {
+        document.querySelector('#event-container').innerHTML = events;
+      });
+  });
+} else {
+  eventContainer.innerHTML = '<h1>Geolocation is not supported by this browser</h1>';
+  console.log('geolication not available');
+}
