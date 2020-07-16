@@ -1,4 +1,4 @@
-A one day project for hackday at &lt;/Salt>
+A one day project for hackday at &lt;/Salt> School of Applied Technology.
 
 An app to search for events nearby, by the event or a city.
 
