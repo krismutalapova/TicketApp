@@ -54,6 +54,7 @@ section {
 
 h2 {
     font-weight: 400;
+    margin: 6px;
 }
 
  /* Modules */
@@ -110,7 +111,7 @@ a {
     
 /* State */
 
-input:focus, textarea:focus, select:focus{
+input:focus, textarea:focus, select:focus, button:focus{
     outline: none;
 }
 
@@ -134,8 +135,20 @@ section:hover {
         font-size: 14px;
     }
 
+    header {
+        margin: 15px;
+    }
+    
+    h1 {
+        margin-bottom: 15px;
+    }
+
     section {
         width: 300px;
+    }
+
+    .event-container {
+        padding: 0;
     }
 
     img {

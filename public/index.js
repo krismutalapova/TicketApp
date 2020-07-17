@@ -32,7 +32,7 @@ const eventTemplate = event => {
 };
 
 const div = document.querySelector('#event-container');
-const locationName = document.querySelector('.location-name');
+const locationName = document.querySelector('#location-name');
 
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(position => {
@@ -72,7 +72,6 @@ const searchEvent = () => {
     .then(data => {
       if (data._embedded) {
         const { events } = data._embedded;
-        console.log(events)
         locationName.textContent = '';
         return events.map(e => eventTemplate(e)).join('');
       } else {
@@ -103,7 +102,6 @@ const searchCity = () => {
     });
 };
 
-window.onload = () => {
   const findEventBtn = document.querySelector('#submit');
   findEventBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -117,4 +115,3 @@ window.onload = () => {
     searchCity();
     document.querySelector('#city_search').value = '';
   });
-};
