@@ -19,9 +19,9 @@ const localEventTemplate = (event) => {
 };
 
 const eventTemplate = event => {
-  const name = capitalize(event.name.toLowerCase().replace(/,.*$/, '').trim());
+  const name = event.name.replace(/,.*$/, '').trim();
   const location = event.dates.timezone;
-  const locationName = location.replace(/\w*\//, '').replace('_', ' ');
+  const locationName = location ? location.replace(/\w*\//, '').replace('_', ' ') : '' ;
   return `
   <a href="${event.url}" target="_blank"><section class="event__card">
     <h2 class="event__artist" id="artist">${name}</h2>
@@ -32,7 +32,7 @@ const eventTemplate = event => {
 };
 
 const div = document.querySelector('#event-container');
-const locationName = document.querySelector('.location-name');
+const locationName = document.querySelector('#location-name');
 
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(position => {
@@ -91,7 +91,7 @@ const searchCity = () => {
       if (data._embedded) {
       const { events } = data._embedded;
       const location = data._embedded.events[0].dates.timezone;
-      locationName.textContent = location.replace(/\w*\//, '');
+      locationName.textContent = location.replace(/\w*\//, '').replace('_', ' ');
       return events.map(e => eventTemplate(e)).join('');
     } else {
       locationName.textContent = `Sorry, no events for ${value}`;
@@ -102,7 +102,6 @@ const searchCity = () => {
     });
 };
 
-window.onload = () => {
   const findEventBtn = document.querySelector('#submit');
   findEventBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -116,4 +115,3 @@ window.onload = () => {
     searchCity();
     document.querySelector('#city_search').value = '';
   });
-};
